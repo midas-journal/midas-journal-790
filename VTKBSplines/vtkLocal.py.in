@@ -1,0 +1,26 @@
+import vtk
+import os
+
+VTK_MAJOR_VERSION = vtk.vtkVersion.GetVTKMajorVersion()
+VTK_MINOR_VERSION = vtk.vtkVersion.GetVTKMinorVersion()
+
+if (os.name != 'posix' or VTK_MAJOR_VERSION > 5 or
+    (VTK_MAJOR_VERSION == 5 and VTK_MINOR_VERSION > 6)):
+
+    import vtk@PROJECT_NAME@Python
+    classnames = dir(vtk@PROJECT_NAME@Python)
+    for classname in classnames:
+        if classname[0:2] != "__":
+            setattr(vtk, classname,
+                    getattr(vtk@PROJECT_NAME@Python, classname))
+    from vtk@PROJECT_NAME@Python import *
+
+else:
+
+    import libvtk@PROJECT_NAME@Python
+    classnames = dir(libvtk@PROJECT_NAME@Python)
+    for classname in classnames:
+        if classname[0:2] != "__":
+            setattr(vtk, classname,
+                    getattr(libvtk@PROJECT_NAME@Python, classname))
+    from libvtk@PROJECT_NAME@Python import *
